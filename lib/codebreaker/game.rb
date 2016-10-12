@@ -80,7 +80,6 @@ module Codebreaker
       @attempts_count = 0
       @started_at   = nil
       @completed_at = nil
-      puts @secret_code
     end
 
     def secret_code

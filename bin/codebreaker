@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'codebreaker'
+
+cb = Codebreaker::Codebreaker.new(ARGV, STDIN, STDOUT)
+cb.run

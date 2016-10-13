@@ -1,6 +1,7 @@
 require 'codebreaker/game'
 require 'codebreaker/player'
 require 'codebreaker/store'
+require 'codebreaker/marker'
 
 module Codebreaker
   class Codebreaker

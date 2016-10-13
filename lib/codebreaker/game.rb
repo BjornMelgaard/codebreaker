@@ -6,22 +6,18 @@ module Codebreaker
     ATTEMPTS_COUNT = 10
     SECRET_LENGTH = 4
 
-    # marks
-    SUCCESS        = '+'.green.freeze
-    WRONG_POSITION = '-'.red.freeze
-    FAILURE        = ' '.freeze
-
     def initialize(input, output)
       @player = Player.new(input, output)
       @store = Store.new
     end
 
     def start
-      @name = @player.welcome
-      catch :end_game do
+      @player.welcome
+      @name = @player.ask_name
+      catch :end_play do
         loop do
           reset_assets!
-          play # throw :end_game when win or loose
+          play # throw :end_play when win or loose
           @player.puts "\nGame has been restarted"
         end
       end
@@ -37,7 +33,7 @@ module Codebreaker
       while @continue_play
         case attempt = @player.request(request_str)
         when 'hint' then hint
-        when 'exit' then throw :end_game
+        when 'exit' then throw :end_play
         when 'restart' then @continue_play = false
         else guess(attempt, request_str.size)
         end
@@ -45,10 +41,10 @@ module Codebreaker
     end
 
     def guess(attempt, indentation)
-      match_count, marks = mark(attempt)
-      @player.puts(' ' * indentation + marks)
+      marker = Marker.new(attempt, @secret_code)
+      @player.puts(' ' * indentation + marker.output)
 
-      win   if match_count == SECRET_LENGTH
+      win   if marker.success_count == SECRET_LENGTH
       loose if @attempts_count >= ATTEMPTS_COUNT
 
       @attempts_count += 1
@@ -69,7 +65,7 @@ module Codebreaker
     end
 
     def try_again?
-      throw :end_game unless @player.yes?('Do you want to try again?')
+      throw :end_play unless @player.yes?('Do you want to try again?')
       @continue_play = false # restart game
     end
 
@@ -88,27 +84,6 @@ module Codebreaker
 
     def hint
       @player.puts "The first number is #{@secret_code[0]} =)"
-    end
-
-    def mark(guess)
-      Integer(guess) # can raise ArgumentError
-      raise ArgumentError if guess.size != SECRET_LENGTH
-
-      guess = guess.chars.map(&:to_i)
-      secret = @secret_code.chars.map(&:to_i)
-
-      match_count = 0
-      marks = guess.each_with_index.map do |digit, index|
-        if digit == secret[index]
-          secret[index] = nil
-          match_count += 1
-          SUCCESS
-        elsif secret.include?(digit)
-          WRONG_POSITION
-        else FAILURE
-        end
-      end
-      [match_count, marks.join]
     end
 
     def save_score

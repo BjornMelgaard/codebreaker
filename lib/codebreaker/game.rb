@@ -6,24 +6,24 @@ module Codebreaker
     ATTEMPTS_COUNT = 10
     SECRET_LENGTH = 4
 
-    def initialize(input, output)
-      @player = Player.new(input, output)
-      @store = Store.new
+    def initialize(ui, store)
+      @ui = ui
+      @store = store
     end
 
     def start
-      @player.welcome
-      @name = @player.ask_name
+      @ui.welcome
+      @name = @ui.ask_name
       catch :end_play do
         loop do
           reset_assets!
-          play # throw :end_play when win or loose
-          @player.puts "\nGame has been restarted"
+          play # throw :end_play when win or loose or exit
+          @ui.puts "\nGame has been restarted"
         end
       end
-      show_score if @player.yes?('Can I print score?')
+      show_score if @ui.yes?('Can I print score?')
       @store.save_scores
-      @player.bye
+      @ui.bye
     end
 
     def play
@@ -31,7 +31,7 @@ module Codebreaker
       @continue_play = true
       request_str = 'Enter your guess: '
       while @continue_play
-        case attempt = @player.request(request_str)
+        case attempt = @ui.request(request_str)
         when 'hint' then hint
         when 'exit' then throw :end_play
         when 'restart' then @continue_play = false
@@ -42,30 +42,30 @@ module Codebreaker
 
     def guess(attempt, indentation)
       marker = Marker.new(attempt, @secret_code)
-      @player.puts(' ' * indentation + marker.output)
+      @ui.puts(' ' * indentation + marker.output)
 
       win   if marker.success_count == SECRET_LENGTH
       loose if @attempts_count >= ATTEMPTS_COUNT
 
       @attempts_count += 1
     rescue ArgumentError
-      @player.puts "You must enter number with #{SECRET_LENGTH} signs. Try again."
+      @ui.puts "You must enter number with #{SECRET_LENGTH} signs. Try again."
     end
 
     def loose
-      @player.puts "You loose, secret code was #{@secret_code}"
+      @ui.puts "You loose, secret code was #{@secret_code}"
       try_again?
     end
 
     def win
-      @player.puts 'Congratulations, you won!'.bold
+      @ui.puts 'Congratulations, you won!'.bold
       @completed_at = Time.now
       save_score
       try_again?
     end
 
     def try_again?
-      throw :end_play unless @player.yes?('Do you want to try again?')
+      throw :end_play unless @ui.yes?('Do you want to try again?')
       @continue_play = false # restart game
     end
 
@@ -83,7 +83,7 @@ module Codebreaker
     end
 
     def hint
-      @player.puts "The first number is #{@secret_code[0]} =)"
+      @ui.puts "The first number is #{@secret_code[0]} =)"
     end
 
     def save_score
@@ -91,7 +91,7 @@ module Codebreaker
     end
 
     def show_score
-      @player.puts @store.statistic_for(@name)
+      @ui.puts @store.statistic_for(@name)
     end
   end
 end

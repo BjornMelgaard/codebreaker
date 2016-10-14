@@ -2,9 +2,12 @@ require 'spec_helper'
 
 module Codebreaker
   describe Game do
-    let(:output) { double('output').as_null_object }
-    let(:input)  { double('stdin').as_null_object }
-    let(:game)   { Game.new(input, output) }
+    let(:ui)    { UI.new }
+    let(:store) { Store.new }
+    let(:game) { Game.new(ui, store) }
+    before do
+      allow(ui).to receive(:puts)
+    end
 
     describe '#secret_code' do
       subject { game.method :secret_code }
@@ -37,7 +40,8 @@ module Codebreaker
       context 'with not overflowed attempts count and wrong guess' do
         before { game.instance_variable_set(:@attempts_count, 0) }
         it 'should change @attempts_count' do
-          expect { game.guess('0000', 0) }.to change { game.instance_variable_get(:@attempts_count) }.by(1)
+          expect { game.guess('0000', 0) }.to \
+            change { game.instance_variable_get(:@attempts_count) }.by(1)
         end
       end
     end

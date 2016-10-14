@@ -1,7 +1,6 @@
 module Codebreaker
   # helper
   class Marker
-    # marks
     SUCCESS        = '+'.green.freeze
     WRONG_POSITION = '-'.red.freeze
     FAILURE        = ' '.freeze

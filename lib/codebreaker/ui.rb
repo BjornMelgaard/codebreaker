@@ -2,11 +2,7 @@ require 'colorize'
 
 module Codebreaker
   # view
-  class Player
-    def initialize(input, output)
-      @input, @output = input, output
-    end
-
+  class UI
     def welcome
       commands = %w(hint exit restart).map(&:red).join(', ')
       puts "\n    Welcome to Codebreaker.\n" \
@@ -24,19 +20,18 @@ module Codebreaker
       puts 'See you space, cowboy ヾ(^_^)'.blue
     end
 
-    def puts(msg)
-      @output.puts msg
-    end
-
     def yes?(msg)
       request(msg + ' (y/n): ').casecmp('y').zero?
     end
 
-    def request(msg)
-      @output.print(msg)
-      @input.gets.chomp
-    rescue NoMethodError
-      exit
+    def puts(_msg)
+      raise NotImplementedError, 'This method intended to print '\
+        'message and add a newline'
+    end
+
+    def request(_msg)
+      raise NotImplementedError, 'This method intended to print '\
+        'message and request string from input'
     end
   end
 end

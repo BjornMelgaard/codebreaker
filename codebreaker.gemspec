@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version       = '0.0.1'
   spec.authors       = ['BjornMelgaard']
   spec.email         = ['melgaardbjorn@gmail.com']
-  spec.summary       = 'summary'
-  spec.description   = 'description'
+  spec.summary       = 'game'
+  spec.description   = 'test-game'
   spec.homepage      = 'http://rubygems.org/gems/codebreaker'
   spec.license       = 'MIT'
 
@@ -27,10 +27,10 @@ Gem::Specification.new do |spec|
   spec.executables   = ['codebreaker']
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'colorize'
+  spec.add_runtime_dependency 'colorize', '~> 0'
 
   spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'guard-rspec'
+  spec.add_development_dependency 'guard-rspec', '~> 4'
 end

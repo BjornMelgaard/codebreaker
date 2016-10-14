@@ -1,19 +1,15 @@
 module Codebreaker
   # helper
   class Marker
-    SUCCESS        = '+'.green.freeze
-    WRONG_POSITION = '-'.red.freeze
+    SUCCESS        = '+'.freeze
+    WRONG_POSITION = '-'.freeze
     FAILURE        = ' '.freeze
 
     attr_reader :success_count
 
     def initialize(guess, secret)
-      Integer(guess) # can raise ArgumentError
-      raise ArgumentError if guess.size != secret.length
-
       guess  = guess.chars.map(&:to_i)
       secret = secret.chars.map(&:to_i)
-
       @success_count = 0
       @marks = guess.each_with_index.map do |digit, index|
         if digit == secret[index]

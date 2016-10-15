@@ -10,7 +10,6 @@ module Codebreaker
       @secret = Array.new(secret_length) { rand(6) + 1 }.join
       @started_at   = Time.now
       @completed_at = nil
-      puts @secret
     end
 
     def code_valid?(input)

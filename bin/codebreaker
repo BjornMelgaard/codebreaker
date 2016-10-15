@@ -16,4 +16,4 @@ options.parse!(ARGV)
 # game = Codebreaker::Game.new(ui, store)
 # game.start
 
-g = ConsoleGame.new
+console_game = ConsoleGame.new

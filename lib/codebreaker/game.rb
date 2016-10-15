@@ -10,6 +10,7 @@ module Codebreaker
       @secret = Array.new(secret_length) { rand(6) + 1 }.join
       @started_at   = Time.now
       @completed_at = nil
+      print @secret
     end
 
     def code_valid?(input)
@@ -37,8 +38,8 @@ module Codebreaker
       marker.output
     end
 
-    def hint
-      "The first number is #{@secret[0]} =)"
+    def first_number
+      @secret[0]
     end
 
     def statistic

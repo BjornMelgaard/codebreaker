@@ -7,13 +7,5 @@ options.banner = 'Usage: codebreaker [options]'
 options.on('-h', '--help', 'Show this message') { puts(options); exit }
 options.parse!(ARGV)
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#                   Run our application                   #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-# ui = ConsoleUI.new(STDIN, STDOUT)
-# store = MemoryStore.new
-# game = Codebreaker::Game.new(ui, store)
-# game.start
-
 console_game = ConsoleGame.new
+console_game.start

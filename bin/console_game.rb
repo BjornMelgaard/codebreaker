@@ -2,32 +2,24 @@ require 'bundler/setup'
 require 'codebreaker'
 require 'colorize'
 require 'yaml'
+require_relative 'score_manager'
 #
 class ConsoleGame
-  SCORES_PATH = 'scores.yaml'.freeze
-
-  def initialize
-    commands = %w(hint exit restart).map(&:red).join(', ')
-    puts %(
-    Welcome to #{'Codebreaker'.yellow}.
-    Try to guess secret code.
-    Also you have available commands at any time: #{commands}.)
-
+  def start
+    print_welcome
     @name = request '    But first, please, enter your name: '
-    @scores = load_scores(SCORES_PATH) || []
-    if player_scores.empty?
-      puts "    It's look like you have your first game"
-    else
-      puts "    Glad to see you again, #{@name.blue}"
-    end
+    @scores = ScoreManager.new(@name)
+    puts @scores.get.empty? ?
+         "    It's look like you have your first game" :
+         "    Glad to see you again, #{@name.blue}"
     puts "    OK, we can start\n\n"
-    start
-    show_player_scores if yes?('Can I print your scores?')
-    save_scores(SCORES_PATH)
+    run
+    puts @scores.statistics if yes?('Can I print your scores?')
+    @scores.save
     puts 'See you space, cowboy ヾ(^_^)'.blue
   end
 
-  def start
+  def run
     catch :stop_game do
       loop do
         @game = Codebreaker::Game.new
@@ -42,7 +34,7 @@ class ConsoleGame
     @identation = request_str.size
     until @game.ended?
       case input = request(request_str)
-      when 'hint' then puts @game.hint
+      when 'hint' then puts "The first number is #{@game.first_number}"
       when 'exit' then throw :stop_game
       when 'restart' then break
       else process(input)
@@ -63,7 +55,7 @@ class ConsoleGame
   def check_game_status
     if @game.win?
       puts 'Congratulations, you won!'.bold
-      save_score
+      @scores.add(@game.statistic)
       try_again?
     elsif @game.loose?
       puts "You loose, secret code was #{@game.secret_code}"
@@ -77,32 +69,12 @@ class ConsoleGame
 
   private
 
-  def save_scores(path)
-    serialized = YAML.dump(@scores)
-    File.open(path, 'w') { |f| f.write(serialized) }
-  end
-
-  def load_scores(path)
-    return unless File.exist?(path)
-    serialized_scores = File.read(path)
-    YAML.load(serialized_scores)
-  end
-
-  def player_scores
-    @scores.select { |s| s[:name] == @name }
-  end
-
-  def save_score
-    score = { name: @name }.merge(@game.statistic)
-    @scores.push score
-  end
-
-  def show_player_scores
-    player_scores.each_with_index.map do |score, index|
-      puts "    Game #{index + 1}: " \
-           "attempts - #{score[:attempts_used]}/#{score[:attempts_number]}, " \
-           "time - #{score[:time_taken]} seconds"
-    end
+  def print_welcome
+    commands = %w(hint exit restart).map(&:red).join(', ')
+    puts %(
+    Welcome to #{'Codebreaker'.yellow}.
+    Try to guess secret code.
+    Also you have available commands at any time: #{commands}.)
   end
 
   def colorize_marks(marks)

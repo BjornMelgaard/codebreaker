@@ -10,7 +10,6 @@ module Codebreaker
       @secret = Array.new(secret_length) { rand(6) + 1 }.join
       @started_at   = Time.now
       @completed_at = nil
-      print @secret
     end
 
     def code_valid?(input)
@@ -31,10 +30,20 @@ module Codebreaker
 
     def guess(input)
       return if ended?
-
       marker = Marker.new(input, @secret)
-      @completed_at = Time.now if marker.success_count == @secret.length
-      @attempts_left -= 1
+
+      if marker.success_count == @secret.length
+        # win
+        @win = true
+        @completed_at = Time.now
+      elsif @attempts_left <= 0
+        # loose
+        @loose = true
+        @completed_at = Time.now
+      else
+        @attempts_left -= 1
+      end
+
       marker.output
     end
 
@@ -49,15 +58,15 @@ module Codebreaker
     end
 
     def ended?
-      win? || loose?
+      @completed_at != nil
     end
 
     def loose?
-      @attempts_left <= 0
+      @loose != nil
     end
 
     def win?
-      !@completed_at.nil?
+      @win != nil
     end
   end
 end

@@ -4,6 +4,8 @@ module Codebreaker
     ATTEMPTS = 10
     SECRET_LENGTH = 4
 
+    attr_reader :attempts_left
+
     def initialize(attempts = ATTEMPTS, secret_length = SECRET_LENGTH)
       @attempts_left = @attempts_number = attempts
 

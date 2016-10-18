@@ -37,30 +37,31 @@ class ConsoleGame
       when 'hint' then puts "The first number is #{@game.first_number}"
       when 'exit' then throw :stop_game
       when 'restart' then break
-      else process(input)
+      else guess(input)
       end
     end
   end
 
-  def process(input)
+  def guess(input)
     if @game.code_valid?(input) == false
       puts "You must enter number with #{@game.code_length} signs. Try again."
     else
       marks = colorize_marks @game.guess(input)
       puts ' ' * @identation + marks
-      check_game_status
+      win   if @game.win?
+      loose if @game.loose?
     end
   end
 
-  def check_game_status
-    if @game.win?
-      puts 'Congratulations, you won!'.bold
-      @scores.add(@game.statistic)
-      try_again?
-    elsif @game.loose?
-      puts "You loose, secret code was #{@game.secret_code}"
-      try_again?
-    end
+  def win
+    puts 'Congratulations, you won!'.bold
+    @scores.add(@game.statistic)
+    try_again?
+  end
+
+  def loose
+    puts "You loose, secret code was #{@game.secret_code}"
+    try_again?
   end
 
   def try_again?

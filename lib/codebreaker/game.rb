@@ -9,7 +9,7 @@ module Codebreaker
     def initialize(attempts = ATTEMPTS, secret_length = SECRET_LENGTH)
       @attempts_left = @attempts_number = attempts
 
-      @secret = Array.new(secret_length) { rand(6) + 1 }.join
+      @secret = generate_secret(secret_length)
       @started_at   = Time.now
       @completed_at = nil
     end
@@ -69,6 +69,12 @@ module Codebreaker
 
     def win?
       @win != nil
+    end
+
+    private
+
+    def generate_secret(length)
+      Array.new(length) { rand(6) + 1 }.join
     end
   end
 end

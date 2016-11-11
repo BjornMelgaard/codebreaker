@@ -8,18 +8,21 @@ module Codebreaker
     attr_reader :success_count
 
     def initialize(guess, secret)
-      guess  = guess.chars.map(&:to_i)
-      secret = secret.chars.map(&:to_i)
+      guess  = guess.split
+      secret = secret.split
       @success_count = 0
-      @marks = guess.each_with_index.map do |digit, index|
-        if digit == secret[index]
-          secret[index] = nil
-          @success_count += 1
-          SUCCESS
-        elsif secret.include?(digit)
-          WRONG_POSITION
-        else FAILURE
-        end
+      # @marks = FAILURE * secret.lenght
+      @marks = Array.new(secret.lenght, FAILURE)
+
+      guess.each_with_index do |g, index|
+        secret[index] = nil
+        guess[index]  = nil
+        @success_count += 1
+        @marks[index] = SUCCESS
+      end
+
+      guess.each_with_index do |g, index|
+        @marks[index] = WRONG_POSITION if g && secret.include?(g)
       end
     end
 

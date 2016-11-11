@@ -9,9 +9,9 @@ class ConsoleGame
     print_welcome
     @name = request '    But first, please, enter your name: '
     @scores = ScoreManager.new(@name)
-    puts @scores.get.empty? ?
-         "    It's look like you have your first game" :
-         "    Glad to see you again, #{@name.blue}"
+    puts @scores.get.empty? 
+         ? "    It's look like you have your first game" 
+         : "    Glad to see you again, #{@name.blue}"
     puts "    OK, we can start\n\n"
     run
     puts @scores.statistics if yes?('Can I print your scores?')

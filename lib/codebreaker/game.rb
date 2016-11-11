@@ -1,5 +1,4 @@
 module Codebreaker
-  # controller
   class Game
     ATTEMPTS = 10
     SECRET_LENGTH = 4
@@ -15,10 +14,7 @@ module Codebreaker
     end
 
     def code_valid?(input)
-      Integer(input) # can raise ArgumentError
-      input.size == @secret.length
-    rescue ArgumentError
-      false
+      input =~ /^[1-6]{#{code_length}}$/
     end
 
     def code_length
@@ -34,7 +30,7 @@ module Codebreaker
       return if ended?
       marker = Marker.new(input, @secret)
 
-      if marker.success_count == @secret.length
+      if marker.success_count == code_length
         # win
         @win = true
         @completed_at = Time.now

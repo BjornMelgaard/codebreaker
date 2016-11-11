@@ -4,6 +4,13 @@ module Codebreaker
   describe Game do
     let(:game) { Game.new }
 
+    describe '#code_valid?' do
+      subject { game.code_valid? }
+      # it { expected.to eq('+   ') }
+      it { is_expected.with('1111').to be true }
+      it { is_expected.with('1119').to be false }
+    end
+
     describe '#guess' do
       before do
         game.instance_variable_set(:@secret, '1234')

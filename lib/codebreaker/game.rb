@@ -13,12 +13,12 @@ module Codebreaker
       @completed_at = nil
     end
 
-    def code_valid?(input)
-      input =~ /^[1-6]{#{code_length}}$/
-    end
-
     def code_length
       @secret.length
+    end
+
+    def code_valid?(input)
+      /^[1-6]{#{code_length}}$/ === input
     end
 
     def secret_code
@@ -52,7 +52,11 @@ module Codebreaker
     def statistic
       time_taken = (@completed_at - @started_at).to_i
       attempts_used = @attempts_number - @attempts_left
-      { attempts_number: @attempts_number, attempts_used: attempts_used, time_taken: time_taken }
+      {
+        attempts_number: @attempts_number,
+        attempts_used: attempts_used,
+        time_taken: time_taken
+      }
     end
 
     def ended?

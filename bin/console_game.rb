@@ -3,15 +3,15 @@ require 'codebreaker'
 require 'colorize'
 require 'yaml'
 require_relative 'score_manager'
-#
+
 class ConsoleGame
   def start
     print_welcome
     @name = request '    But first, please, enter your name: '
     @scores = ScoreManager.new(@name)
-    puts @scores.get.empty? 
-         ? "    It's look like you have your first game" 
-         : "    Glad to see you again, #{@name.blue}"
+    puts @scores.player_scores.empty? \
+          ? "    It's look like you have your first game"
+          : "    Glad to see you again, #{@name.blue}"
     puts "    OK, we can start\n\n"
     run
     puts @scores.statistics if yes?('Can I print your scores?')
@@ -44,7 +44,7 @@ class ConsoleGame
 
   def guess(input)
     if @game.code_valid?(input) == false
-      puts "You must enter number with #{@game.code_length} signs. Try again."
+      puts "You must enter number with #{@game.code_length} signs, from 1 to 6. Try again."
     else
       marks = colorize_marks @game.guess(input)
       puts ' ' * @identation + marks

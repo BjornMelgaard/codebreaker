@@ -5,10 +5,14 @@ module Codebreaker
     let(:game) { Game.new }
 
     describe '#code_valid?' do
-      subject { game.code_valid? }
-      # it { expected.to eq('+   ') }
-      it { is_expected.with('1111').to be true }
-      it { is_expected.with('1119').to be false }
+      it 'should pass' do
+        expect(game.code_valid?('1111')).to be true
+      end
+
+      it 'should fail' do
+        expect(game.code_valid?('11111')).to be false
+        expect(game.code_valid?('1119')).to be false
+      end
     end
 
     describe '#guess' do

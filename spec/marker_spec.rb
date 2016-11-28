@@ -32,5 +32,10 @@ module Codebreaker
       it { expect(marker.output).to eq('++ -') }
       it { expect(marker.success_count).to eq(2) }
     end
+    context 'complex situation 3' do
+      let(:marker) { Marker.new('1234', '1243') }
+      it { expect(marker.output).to eq('++--') }
+      it { expect(marker.success_count).to eq(2) }
+    end
   end
 end

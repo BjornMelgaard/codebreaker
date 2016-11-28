@@ -1,5 +1,4 @@
 module Codebreaker
-  # helper
   class Marker
     SUCCESS        = '+'.freeze
     WRONG_POSITION = '-'.freeze
@@ -8,21 +7,26 @@ module Codebreaker
     attr_reader :success_count
 
     def initialize(guess, secret)
-      guess  = guess.split
-      secret = secret.split
+      guesses = guess.chars
+      secrets = secret.chars
       @success_count = 0
-      # @marks = FAILURE * secret.lenght
-      @marks = Array.new(secret.lenght, FAILURE)
+      @marks = Array.new(secret.length, FAILURE)
 
-      guess.each_with_index do |g, index|
-        secret[index] = nil
-        guess[index]  = nil
+      guesses.zip(secrets).each_with_index do |(g, s), index|
+        next unless g == s
+
+        secrets[index] = nil
+        guesses[index] = nil
         @success_count += 1
         @marks[index] = SUCCESS
       end
 
-      guess.each_with_index do |g, index|
-        @marks[index] = WRONG_POSITION if g && secret.include?(g)
+      guesses.each_with_index do |g, index|
+        position = g && secrets.index(g)
+        next unless position
+
+        secrets[position] = nil
+        @marks[index] = WRONG_POSITION
       end
     end
 

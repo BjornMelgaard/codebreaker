@@ -10,7 +10,7 @@ class ScoreManager
     save_scores
   end
 
-  def get
+  def player_scores
     @scores.select { |s| s[:name] == @name }
   end
 
@@ -20,7 +20,7 @@ class ScoreManager
   end
 
   def statistics
-    get.each_with_index.map do |score, index|
+    player_scores.each_with_index.map do |score, index|
       "    Game #{index + 1}: " \
       "attempts - #{score[:attempts_used]}/#{score[:attempts_number]}, " \
       "time - #{score[:time_taken]} seconds"

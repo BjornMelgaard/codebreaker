@@ -13,7 +13,7 @@ module Codebreaker
       @marks = Array.new(secret.length, FAILURE)
 
       guesses.zip(secrets).each_with_index do |(g, s), index|
-        next unless g == s
+        next if g != s
 
         secrets[index] = nil
         guesses[index] = nil

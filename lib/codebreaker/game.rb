@@ -50,6 +50,7 @@ module Codebreaker
     end
 
     def statistic
+      return unless ended?
       time_taken = (@completed_at - @started_at).to_i
       attempts_used = @attempts_number - @attempts_left
       {
@@ -60,15 +61,15 @@ module Codebreaker
     end
 
     def ended?
-      @completed_at != nil
+      !@completed_at.nil?
     end
 
     def loose?
-      @loose != nil
+      !@loose.nil?
     end
 
     def win?
-      @win != nil
+      !@win.nil?
     end
 
     private

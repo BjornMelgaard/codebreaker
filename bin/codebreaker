@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require_relative 'console_game'
+
+options = OptionParser.new
+options.banner = 'Usage: codebreaker [options]'
+options.on('-h', '--help', 'Show this message') { puts(options); exit }
+options.parse!(ARGV)
+
+console_game = ConsoleGame.new
+console_game.start

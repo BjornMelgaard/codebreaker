@@ -1,36 +1,33 @@
 # Codebreaker
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/codebreaker`. To experiment with that code, run `bin/console` for an interactive prompt.
+task from https://rubygarage.github.io/slides/rspec#/37
 
-TODO: Delete this and the text above, and describe your gem
+## Task
 
-## Installation
+Codebreaker is a logic game in which a code-breaker tries to break a secret code created by a code-maker. The code-maker, which will be played by the application we’re going to write, creates a secret code of four numbers between 1 and 6.
 
-Add this line to your application's Gemfile:
+The code-breaker then gets some number of chances to break the code. In each turn, the code-breaker makes a guess of four numbers. The code-maker then marks the guess with up to four + and - signs.
 
-```ruby
-gem 'codebreaker'
-```
+A + indicates an exact match: one of the numbers in the guess is the same as one of the numbers in the secret code and in the same position.
 
-And then execute:
+A - indicates a number match: one of the numbers in the guess is the same as one of the numbers in the secret code but in a different position.
 
-    $ bundle
 
-Or install it yourself as:
+## Selecting Stories
 
-    $ gem install codebreaker
+A great way to get started gathering user stories is to do a high-level brain dump of the sorts of things we might like to do. Here are some titles to get started:
 
-## Usage
+Start game - When a new game was started, the game generates secret code. The code should have 4 items.
 
-TODO: Write usage instructions here
+Code-breaker submits guess - The code-breaker propose a guess, and the system replies by marking the guess according to the marking algorithm.
 
-## Development
+Code-breaker wins game - The code-breaker propose a guess that matches the secret code exactly. The system responds by marking the guess with four + signs.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Code-breaker loses game - After some number of turns, the game tells the code-breaker that the game is over (need to decide how many turns and whether to reveal the code).
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Code-breaker plays again - After the game is won or lost, the system prompts the code-breaker to play again. If the code-breaker indicates yes, a new game begins. If the code-breaker indicates no, the system shuts down.
 
-## Contributing
+Code-breaker requests hint - At any time during a game, the code-breaker can request a hint, at which point the system reveals one of the numbers in the secret code.
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/codebreaker.
+Code-breaker saves score - After the game is won or lost, the code-breaker can opt to save information about the game: who (initials?), how many turns, and so on.
 
